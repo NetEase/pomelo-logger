@@ -39,6 +39,14 @@ in pomelo, you just configure the log4js file and set **lineDebug** for true
   "lineDebug": true
 }
 ```
+### dynamic configure logger level
+in pomelo logger configuration file log4js.json, you can add reloadSecs option. The reloadSecs means reload logger configuration file every given time. For example
+```
+{
+	"reloadSecs": 30
+}
+```
+the above configuration means reload the configuration file every 30 seconds. You can dynamic change the logger level, but it does not support dynamiclly changing configuration of appenders.
 
 ## Example
 log.js
