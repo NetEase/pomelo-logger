@@ -47,7 +47,7 @@ to use this feature, add this code
 process.env.RAW_MESSAGE = true;
 ```
 
-in pomelo, you just configure the log4js file and set **lineDebug** for true  
+in pomelo, you just configure the log4js file and set **rawMessage** for true  
 ```
 {
   "appenders": [
