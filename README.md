@@ -39,6 +39,29 @@ in pomelo, you just configure the log4js file and set **lineDebug** for true
   "lineDebug": true
 }
 ```
+
+### log raw messages
+in raw message mode, your log message will be simply your messages, no prefix and color format strings  
+to use this feature, add this code  
+```
+process.env.RAW_MESSAGE = true;
+```
+
+in pomelo, you just configure the log4js file and set **lineDebug** for true  
+```
+{
+  "appenders": [
+  ],
+
+  "levels": {
+  }, 
+
+  "replaceConsole": true,
+
+  "rawMessage": true
+}
+```
+
 ### dynamic configure logger level
 in pomelo logger configuration file log4js.json, you can add reloadSecs option. The reloadSecs means reload logger configuration file every given time. For example
 ```
