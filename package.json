@@ -3,10 +3,10 @@
     "version": "0.1.7",
     "private": false,
     "dependencies": {
-        "log4js": "0.6.21"
+        "log4js": "^6.3.0"
     },
     "devDependencies": {
-        "should": ">=0.0.1",
-        "mocha": ">=0.0.1"
+        "mocha": "^8.2.1",
+        "should": "^13.2.3"
     }
 }
