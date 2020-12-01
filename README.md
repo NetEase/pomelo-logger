@@ -9,34 +9,66 @@ npm install pomelo-logger
 ```
 
 ## Features
-### log prefix
-besides category, you can output prefix as you like in your log  
-prefix can be filename, serverId, serverType, host etc  
-to use this feature, you just pass prefix params to getLogger function  
-```
-var logger = require('pomelo-logger').getLogger(category, prefix1, prefix2, ...);
-```
- log output msg will output with prefix ahead   
-
-### get line number in debug
-when in debug environment, you may want to get the line number of the log  
-to use this feature, add this code   
-```
-process.env.LOGGER_LINE = true;
-```
-
-in pomelo, you just configure the log4js file and set **lineDebug** for true  
-```
+### config
+in pomelo, you just configure the log4js file  
+```json
 {
-  "appenders": [
-  ],
-
-  "levels": {
-  }, 
-
-  "replaceConsole": true,
-
-  "lineDebug": true
+  "appenders": {
+    "console": {
+      "type": "console",
+      "layout": {
+        "type": "pattern",
+        "pattern": "%[[%d{yyyy-MM-dd hh:mm:ss}]-[%p]-[pid=%z]-[%f{1}-%l] %m%]"
+      }
+    },
+    "rpc-log": {
+      "type": "dateFile",
+      "filename": "./logs/rpc-log-${opts:serverId}.log",
+      "alwaysIncludePattern": true,
+      "pattern": "yyyy-MM-dd.log",
+      "layout": {
+        "type": "pattern",
+        "pattern": "%[[%d{yyyy-MM-dd hh:mm:ss}]-[%p]-[pid=%z]-[%f{2}-%l] %m%]"
+      }
+    },
+    "crash": {
+      "type": "file",
+      "filename": "./logs/crash.log",
+      "maxLogSize": 31457280,
+      "backups": 5,
+      "layout": {
+        "type": "pattern",
+        "pattern": "%[[%d{yyyy-MM-dd hh:mm:ss}]-[%p]-[pid=%z]-[%f-%l] %m%]"
+      }
+    }
+  },
+  "categories": {
+    "default": {
+      "appenders": [
+        "console"
+      ],
+      "level": "debug",
+      "enableCallStack": true
+    },
+    "rpc-log": {
+      "appenders": [
+        "rpc-log",
+        "console"
+      ],
+      "level": "error",
+      "enableCallStack": true
+    },
+    "crash": {
+      "appenders": [
+        "crash",
+        "console"
+      ],
+      "level": "error",
+      "enableCallStack": true
+    }
+  },
+  "rawMessage": false,
+  "reloadSecs": 180
 }
 ```
 
@@ -53,7 +85,7 @@ in pomelo, you just configure the log4js file and set **rawMessage** for true
   "appenders": [
   ],
 
-  "levels": {
+  "categories": {
   }, 
 
   "replaceConsole": true,
@@ -61,6 +93,14 @@ in pomelo, you just configure the log4js file and set **rawMessage** for true
   "rawMessage": true
 }
 ```
+### log prefix
+besides category, you can output prefix as you like in your log  
+prefix can be filename, serverId, serverType, host etc  
+to use this feature, you just pass prefix params to getLogger function  
+```
+var logger = require('pomelo-logger').getLogger(category, prefix1, prefix2, ...);
+```
+ log output msg will output with prefix ahead   
 
 ### dynamic configure logger level
 in pomelo logger configuration file log4js.json, you can add reloadSecs option. The reloadSecs means reload logger configuration file every given time. For example
@@ -76,7 +116,6 @@ log.js
 ```
 var logger = require('pomelo-logger').getLogger('log', __filename, process.pid);
 
-process.env.LOGGER_LINE = true;
 logger.info('test1');
 logger.warn('test2');
 logger.error('test3');
